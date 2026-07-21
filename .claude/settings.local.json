@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(find \"d:/日常工作/个人博客/folio-2019/static/models\" -type f -exec ls -lh {} +)",
+      "Bash(sort -k5 -rh)",
+      "Bash(openspec new *)",
+      "Bash(openspec status *)",
+      "Bash(openspec instructions *)",
+      "Bash(find dist *)"
+    ]
+  }
+}
