@@ -5,6 +5,20 @@
 
 ---
 
+> ## 📌 本项目实际部署情况（2026-07-23 更新）
+>
+> **最终采用方案**：Cloudflare Workers（Static Assets 模式），不是 Vercel。
+>
+> **原因**：Vercel 国内无法注册；Cloudflare Pages 新建项目已统一为 Workers 架构，纯静态站通过 [wrangler.jsonc](wrangler.jsonc) 声明静态资源即可。
+>
+> **线上地址**：https://folio-2019.i-lubake.workers.dev
+>
+> **关键踩坑 & 配置细节**：详见 [ops/deploy-log.md](ops/deploy-log.md)（强烈建议阅读，避免重复踩坑）。
+>
+> 下文方案 A（Vercel）和方案 B（Cloudflare Pages）作为备选保留，但**首次部署请优先参考 [ops/deploy-log.md](ops/deploy-log.md) 的 Cloudflare Workers Static Assets 模式**。
+
+---
+
 ## 一、项目技术画像（部署前必须了解）
 
 | 维度 | 说明 |

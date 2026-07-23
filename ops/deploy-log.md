@@ -18,13 +18,40 @@
 - 备注：
 ```
 
-## 待填：首次部署
+## 2026-07-23：首次部署到 Cloudflare Workers（Static Assets）
 
-- 平台：Vercel（计划）
-- 项目 URL：_待用户填（部署后从 Dashboard 复制_
-- 临时域名：_待填（形如 `xxx.vercel.app`）_
-- 自定义域名：无（第二阶段）
-- 本次 commit SHA：_待用户 push 后填_
-- 构建产物体积：19 MB（`du -sh dist`，2026-07-21 本地构建）
-- Lighthouse Performance / Accessibility：_待填_
-- 备注：本次提交包含身份替换（ilubake）、关闭 sourcemap、删除原作者 GA 与 Threejs Journey 弹窗。
+- **平台**：Cloudflare Workers（Static Assets 模式）
+- **项目 URL（Dashboard）**：https://dash.cloudflare.com/90319a173cc213619138038dad6cfbca/workers/services/folio-2019
+- **默认域名**：https://folio-2019.i-lubake.workers.dev
+- **自定义域名**：无（第二阶段，可后续绑定）
+- **Git 仓库**：git@github.com:ilubake/folio-2019.git
+- **构建产物体积**：19 MB（`du -sh dist`）
+- **单文件最大**：1.1 MB（`dist/assets/index-*.js`）
+- **构建耗时**：约 4 秒（Vite build）+ 约 30 秒（wrangler deploy）
+- **Lighthouse**：_待测_
+- **关键配置**：
+  - Framework preset：None（重要：不要选 Vite，否则 wrangler 会按 Worker 自动配置）
+  - Build command：`npm run build`
+  - Deploy command：`npx wrangler deploy`
+  - Root directory：`/`
+  - Production branch：`master`
+- **配置文件**：[wrangler.jsonc](../wrangler.jsonc) 声明静态资源 + SPA 回退
+- **API Token 权限**：Cloudflare Pages Edit + Workers Scripts Edit（Custom Token，不是 "Edit Cloudflare Workers" 模板）
+
+### 踩坑记录（避免下次重蹈）
+
+1. **Vercel 国内无法注册** → 切换到 Cloudflare。
+2. **Framework preset 选 "Vite" 会被识别成 Worker，但要求 Vite ≥ 6.0.0** → 选 None + 让 wrangler.jsonc 接管。
+3. **`npx wrangler deploy` 在 CI 中报 "Missing Pages project name"** → 必须用 `wrangler.jsonc` 声明，不能靠交互式 prompt。
+4. **"Edit Cloudflare Workers" 模板不包含 Pages Edit 权限** → 用 Custom Token 显式加 `Cloudflare Pages → Edit`。
+5. **`wrangler pages deploy` 和 `wrangler deploy` 不能混用** → Pages 项目用前者，Workers Static Assets 项目用后者。本项目是后者。
+
+### 下次部署只需
+
+```bash
+git add .
+git commit -m "<message>"
+git push origin master
+```
+
+push 即自动触发 CF Workers Builds，无需手动操作。
